@@ -68,7 +68,6 @@ function remplaceImage(){
                 
             }
             selectedZone.classList.add('selected');
-            selectedZone.classList.add('tick-mark')
             if(selectedZone.firstChild.src){
                 verifySelected(selectedZone.firstChild.src)
             }
@@ -100,17 +99,20 @@ const initialiseSelection = () => {
     document.querySelectorAll('.depot').forEach(item => {
         item.classList.remove('selected');
     })
+    document.querySelectorAll('.savedimgCont').forEach(item => {
+        item.classList.remove('tick-mark');
+    })
 }
 
 function verifySelected(src){
     document.querySelectorAll('.savedimgCont').forEach(item => {
-        if(item.src == src){
-            // console.log("check", src, item.src)
+        if(item.firstChild.src == src){
             // const check = document.createElement('div')
             // check.classList.add('tick-mark')
+            item.classList.add('tick-mark');
+            console.log("check", src, item.firstChild.src)
         }
-        item.classList.add('tick-mark');
-        console.log("check : ", src , item)
+        console.log("check",item.firstChild.src, src)
     })
 }
 
