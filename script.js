@@ -20,6 +20,11 @@ fetch(URL)
             cont.classList.add('savedimgCont');
             let img = document.createElement('img');
             img.classList.add('savedimg');
+
+            img.setAttribute('draggable', true);
+            img.addEventListener('dragstart', dragStart);
+            img.addEventListener('dragend', dragEnd);
+
             img.setAttribute('src', `./img/img${i+1}.jpg`);
             cont.appendChild(img);
             aside.appendChild(cont); 
@@ -35,6 +40,11 @@ function showData(data){
         let img = document.createElement('img');
         img.classList.add('savedimg');
         img.setAttribute('src', item.urls.full);
+
+        img.setAttribute('draggable', true);
+        img.addEventListener('dragstart', dragStart);
+        img.addEventListener('dragend', dragEnd);
+
         cont.appendChild(img);
         aside.appendChild(cont);  
     });
@@ -47,6 +57,12 @@ function showData(data){
 for(let i = 0; i < MAINIMGNUM; i++){
     let field = document.createElement('div');
     field.classList.add('depot');
+
+    field.addEventListener('dragover', dragOver);
+    field.addEventListener('dragenter', dragEnter);
+    field.addEventListener('dragleave', dragLeave);
+    field.addEventListener('drop', dragDrop);
+
     field.style.backgroundImage = "./img/img1.jpg";
     
     let zone = document.createElement('h2');
@@ -119,3 +135,46 @@ function verifySelected(src){
 
 
 remplaceImage();
+
+
+//drag and drop
+
+let draggedItem = null;
+
+function dragStart(e) {
+    draggedItem = e.target;
+    setTimeout(() => (e.target.style.display = "none"), 0);
+}
+
+function dragEnd(e) {
+    e.target.style.display = "block";
+    draggedItem = null;
+}
+
+function dragOver(e) {
+    e.preventDefault();
+}
+
+function dragEnter(e) {
+    e.preventDefault();
+}
+
+function dragLeave() {
+    this.style.backgroundColor = "initial";
+}
+
+function dragDrop() {
+    this.style.backgroundColor = "initial";
+    if(this.querySelector('.depotImg')) {
+        return; // Empêche le dépôt de plusieurs images dans une même zone
+    }
+    this.innerHTML = ''; // Nettoie la zone avant d'ajouter une nouvelle image
+    const img = document.createElement('img');
+    img.src = draggedItem.src;
+    img.classList.add('depotImg');
+    this.appendChild(img);
+}
+
+document.getElementById('backgroundColorPicker').addEventListener('input', function(e) {
+    main.style.backgroundColor = e.target.value;
+});
